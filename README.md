@@ -2,7 +2,7 @@
 
 ![Bash-Scripting-Cheat-Sheet](https://socialify.git.ci/king04aman/Bash-Scripting-Cheatsheet/image?description=1&font=Jost&forks=1&issues=1&language=1&logo=https%3A%2F%2Fimages.weserv.nl%2F%3Furl%3Dhttps%3A%2F%2Favatars.githubusercontent.com%2Fu%2F62813940%3Fv%3D4%26h%3D250%26w%3D250%26fit%3Dcover%26mask%3Dcircle%26maxage%3D7d&name=1&owner=1&pattern=Circuit%20Board&pulls&pulls=1&stargazers=1&theme=Dark)
 
-*Welcome to the Bash Scripting Cheat Sheet repository! This project aims to be a comprehensive and beginner-friendly resource for learning and mastering Bash scripting. Whether you're a seasoned developer or just starting with shell scripting, this cheat sheet will serve as a handy reference guide.*
+_Welcome to the Bash Scripting Cheat Sheet repository! This project aims to be a comprehensive and beginner-friendly resource for learning and mastering Bash scripting. Whether you're a seasoned developer or just starting with shell scripting, this cheat sheet will serve as a handy reference guide._
 
 ## Table of Contents
 
@@ -58,23 +58,28 @@
   - [Secure Copy](#secure-copy)
   - [Bash Profile](#bash-profile)
   - [Bash Script](#bash-script)
-    - [Variables](#variables-1)
+    - [Variables](#variables)
     - [Environment Variables](#environment-variables)
-    - [Functions](#functions-1)
+    - [Functions](#functions)
     - [Exit Codes](#exit-codes)
   - [Conditional Statements](#conditional-statements)
-    - [Boolean Operators](#boolean-operators-1)
-    - [Numeric Operators](#numeric-operators-1)
-    - [String Operators](#string-operators-1)
-    - [If Statements](#if-statements-1)
-    - [Inline If Statements](#inline-if-statements-1)
-    - [While Loops](#while-loops-1)
-    - [For Loops](#for-loops-1)
-    - [Case Statements](#case-statements-1)
+    - [Boolean Operators](#boolean-operators)
+    - [Numeric Operators](#numeric-operators)
+    - [String Operators](#string-operators)
+    - [If Statements](#if-statements)
+    - [Inline If Statements](#inline-if-statements)
+    - [While Loops](#while-loops)
+    - [For Loops](#for-loops)
+    - [Case Statements](#case-statements)
+- [Input/Ouput Redirectors](#input-output-redirectors)
+- [Command Line Processing Cycle](#command-line-processing-cycle)
+- [Debugging Script](#debugging-shell-scripts)
+- [Colors and Styles](#colors-and-styles)
+- [Tips and Tricks](#tips-and-tricks)
+- [Shortcut Keys](#shortcut-keys)
 - [Best Practices](#best-practices)
 - [Contributing](#contributing)
 - [License](#license)
-
 
 ## Introduction
 
@@ -300,22 +305,22 @@ wc foo.txt              # Count lines, words, and characters in the file
 
 ## File Permissions
 
-| # | Permission              | rwx | Binary |
-| - | -                       | -   | -      |
-| 7 | read, write, and execute | rwx | 111    |
-| 6 | read and write          | rw- | 110    |
-| 5 | read and execute        | r-x | 101    |
-| 4 | read only               | r-- | 100    |
-| 3 | write and execute       | -wx | 011    |
-| 2 | write only              | -w- | 010    |
-| 1 | execute only            | --x | 001    |
-| 0 | none                    | --- | 000    |
+| #   | Permission               | rwx | Binary |
+| --- | ------------------------ | --- | ------ |
+| 7   | read, write, and execute | rwx | 111    |
+| 6   | read and write           | rw- | 110    |
+| 5   | read and execute         | r-x | 101    |
+| 4   | read only                | r-- | 100    |
+| 3   | write and execute        | -wx | 011    |
+| 2   | write only               | -w- | 010    |
+| 1   | execute only             | --x | 001    |
+| 0   | none                     | --- | 000    |
 
 For a directory, execute means you can enter the directory.
 
-| User | Group | Others | Description                                                                                          |
-| -    | -     | -      | -                                                                                                    |
-| 6    | 4     | 4      | User can read and write, everyone else can read (Default file permissions)                           |
+| User | Group | Others | Description                                                                                           |
+| ---- | ----- | ------ | ----------------------------------------------------------------------------------------------------- |
+| 6    | 4     | 4      | User can read and write, everyone else can read (Default file permissions)                            |
 | 7    | 5     | 5      | User can read, write, and execute, everyone else can read and execute (Default directory permissions) |
 
 - u - User
@@ -412,7 +417,7 @@ ls -l                               # Display where symbolic links are pointing
 
 ### zip
 
-Compresses one or more files into *.zip files.
+Compresses one or more files into \*.zip files.
 
 ```bash
 zip foo.zip /bar.txt                # Compress bar.txt into foo.zip
@@ -423,7 +428,7 @@ zip -r|--recurse-paths foo.zip /bar # Compress directory bar into foo.zip
 
 ### gzip
 
-Compresses a single file into *.gz files.
+Compresses a single file into \*.gz files.
 
 ```bash
 gzip /bar.txt foo.gz           # Compress bar.txt into foo.gz and then delete bar.txt
@@ -432,7 +437,7 @@ gzip -k|--keep /bar.txt foo.gz # Compress bar.txt into foo.gz
 
 ### tar -c
 
-Compresses (optionally) and combines one or more files into a single *.tar, *.tar.gz, *.tpz, or *.tgz file.
+Compresses (optionally) and combines one or more files into a single _.tar, _.tar.gz, _.tpz, or _.tgz file.
 
 ```bash
 tar -c|--create -z|--gzip -f|--file=foo.tgz /bar.txt /baz.txt # Compress bar.txt and baz.txt into foo.tgz
@@ -1037,6 +1042,376 @@ uptime=$(uptime)
 echo "System Uptime: $uptime"
 ```
 
+## Input Output Redirectors
+
+```bash
+cmd1|cmd2  # Pipe; takes standard output of cmd1 as standard input to cmd2
+< file     # Takes standard input from file
+> file     # Directs standard output to file
+>> file    # Directs standard output to file; append to file if it already exists
+>|file     # Forces standard output to file even if noclobber is set
+n>|file    # Forces output to file from file descriptor n even if noclobber is set
+<> file    # Uses file as both standard input and standard output
+n<>file    # Uses file as both input and output for file descriptor n
+n>file     # Directs file descriptor n to file
+n<file     # Takes file descriptor n from file
+n>>file    # Directs file description n to file; append to file if it already exists
+n>&        # Duplicates standard output to file descriptor n
+n<&        # Duplicates standard input from file descriptor n
+n>&m       # File descriptor n is made to be a copy of the output file descriptor
+n<&m       # File descriptor n is made to be a copy of the input file descriptor
+&>file     # Directs standard output and standard error to file
+<&-        # Closes the standard input
+>&-        # Closes the standard output
+n>&-       # Closes the output from file descriptor n
+n<&-       # Closes the input from file descriptor n
+
+|tee <file># Output command to both terminal and a file (-a to append to file)
+```
+
+## Command Line Processing Cycle
+
+```bash
+command  # Removes alias and function lookup. Only built-ins and commands found in the search path are executed
+builtin  # Looks up only built-in commands, ignoring functions and commands found in PATH
+enable   # Enables and disables shell built-ins
+
+eval     # Takes arguments and runs them through the command-line processing steps all over again
+trap     # Sets up signal handling for the shell, allowing you to execute commands when signals are received
+```
+
+## Debugging Shell Scripts
+
+```bash
+# Check for syntax errors without executing commands
+bash -n scriptname
+set -o noexec  # Alternative (set option in script)
+
+# Echo commands before running them
+bash -v scriptname
+set -o verbose  # Alternative (set option in script)
+
+# Echo commands after command-line processing
+bash -x scriptname
+set -o xtrace  # Alternative (set option in script)
+
+# Print out the values of variables at script exit
+trap 'echo $varname' EXIT
+
+function errtrap {
+  es=$?
+  echo "ERROR line $1: Command exited with status $es."
+}
+
+# Run whenever a command exits with non-zero status
+trap 'errtrap $LINENO' ERR
+
+function dbgtrap {
+  echo "badvar is $badvar"
+}
+
+# Execute before every statement in a function or script
+trap dbgtrap DEBUG
+
+# Turn off the DEBUG trap after the problematic section
+trap - DEBUG
+
+function returntrap {
+  echo "A return occurred"
+}
+
+# Execute each time a shell function or a script finishes executing
+trap returntrap RETURN
+```
+
+## Colors and Styles
+
+```bash
+# Note: \e or \x1B also work instead of \033
+
+# Reset
+Color_Off='\033[0m' # Text Reset
+
+# Regular Colors
+Black='\033[0;30m'  # Black
+Red='\033[0;31m'    # Red
+Green='\033[0;32m'  # Green
+Yellow='\033[0;33m' # Yellow
+Blue='\033[0;34m'   # Blue
+Purple='\033[0;35m' # Purple
+Cyan='\033[0;36m'   # Cyan
+White='\033[0;97m'  # White
+
+# Additional colors
+LGrey='\033[0;37m'  # Light Gray
+DGrey='\033[0;90m'  # Dark Gray
+LRed='\033[0;91m'   # Light Red
+LGreen='\033[0;92m' # Light Green
+LYellow='\033[0;93m'# Light Yellow
+LBlue='\033[0;94m'  # Light Blue
+LPurple='\033[0;95m'# Light Purple
+LCyan='\033[0;96m'  # Light Cyan
+
+# Bold
+BBlack='\033[1;30m' # Black
+BRed='\033[1;31m'   # Red
+BGreen='\033[1;32m' # Green
+BYellow='\033[1;33m'# Yellow
+BBlue='\033[1;34m'  # Blue
+BPurple='\033[1;35m'# Purple
+BCyan='\033[1;36m'  # Cyan
+BWhite='\033[1;37m' # White
+
+# Underline
+UBlack='\033[4;30m' # Black
+URed='\033[4;31m'   # Red
+UGreen='\033[4;32m' # Green
+UYellow='\033[4;33m'# Yellow
+UBlue='\033[4;34m'  # Blue
+UPurple='\033[4;35m'# Purple
+UCyan='\033[4;36m'  # Cyan
+UWhite='\033[4;37m' # White
+
+# Background
+On_Black='\033[40m' # Black
+On_Red='\033[41m'   # Red
+On_Green='\033[42m' # Green
+On_Yellow='\033[43m'# Yellow
+On_Blue='\033[44m'  # Blue
+On_Purple='\033[45m'# Purple
+On_Cyan='\033[46m'  # Cyan
+On_White='\033[47m' # White
+
+# Example of usage
+echo -e "${Green}This is GREEN text${Color_Off} and normal text"
+echo -e "${Red}${On_White}This is Red text on White background${Color_Off}"
+# Option -e is mandatory, it enables interpretation of backslash escapes
+printf "${Red} This is red \n"
+```
+
+## Tips and Tricks
+
+```bash
+# Set an alias
+cd; nano .bash_profile
+> alias gentlenode='ssh admin@gentlenode.com -p 3404'  # Add your alias in .bash_profile
+
+# To quickly go to a specific directory
+cd; nano .bashrc
+> shopt -s cdable_vars
+> export websites="/Users/mac/Documents/websites"
+
+source .bashrc
+cd $websites
+
+# Shortcut for going back to the previous directory
+cd -
+
+# Quickly create a new directory and navigate into it
+mkcd() { mkdir -p "$@" && cd "$1"; }
+
+# Easily extract compressed files
+extract() {
+    if [ -f "$1" ] ; then
+        case $1 in
+            *.tar.bz2)   tar xvjf "$1"     ;;
+            *.tar.gz)    tar xvzf "$1"     ;;
+            *.tar.xz)    tar xvJf "$1"     ;;
+            *.bz2)       bunzip2 "$1"      ;;
+            *.rar)       unrar x "$1"      ;;
+            *.gz)        gunzip "$1"       ;;
+            *.tar)       tar xvf "$1"      ;;
+            *.tbz2)      tar xvjf "$1"     ;;
+            *.tgz)       tar xvzf "$1"     ;;
+            *.zip)       unzip "$1"        ;;
+            *.Z)         uncompress "$1"   ;;
+            *.7z)        7z x "$1"         ;;
+            *)           echo "'$1' cannot be extracted" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
+
+# Generate a random string
+random_string() {
+    head /dev/urandom | tr -dc A-Za-z0-9 | head -c ${1:-32}
+}
+
+# Quick search for a command in the history
+histgrep() {
+    history | grep "$@"
+}
+
+# Display a progress bar while running a command
+progressbar() {
+    local duration="${1}"
+    local cols=$(tput cols)
+    local fillchar="█"
+    local progresschar="▌"
+    local blankchar="░"
+    local progress=""
+    local percentage=""
+    local elapsed="0"
+
+    while [ "${elapsed}" -lt "${duration}" ]; do
+        percentage=$(( elapsed * 100 / duration ))
+        progress=$(( cols * percentage / 100 ))
+        printf "\r${fillchar}%-${progress}s${blankchar}%-$(( cols - progress ))s ${percentage}%%" | tr ' ' "${progresschar}"
+        sleep 1
+        (( elapsed++ ))
+    done
+
+    printf "\n"
+}
+
+# Show disk usage for current directory sorted by size
+duh() {
+    du -h --max-depth=1 | sort -hr
+}
+
+# Find a file with a pattern in the current directory and its subdirectories
+findf() {
+    find . -type f -iname "*$1*"
+}
+
+# Print the last few lines of a file
+tailn() {
+    tail -n "${1:-10}"
+}
+
+# Open the current directory in a file explorer
+opendir() {
+    if command -v xdg-open >/dev/null 2>&1; then
+        xdg-open .
+    elif command -v open >/dev/null 2>&1; then
+        open .
+    elif command -v explorer >/dev/null 2>&1; then
+        explorer .
+    else
+        echo "Could not detect a supported file explorer."
+    fi
+}
+
+# Count the number of lines in a file
+linecount() {
+    wc -l < "$1"
+}
+
+# Convert Markdown files to HTML using pandoc
+md2html() {
+    if [ $# -eq 0 ]; then
+        echo "Usage: md2html <input_file.md> [output_file.html]"
+        return 1
+    fi
+    input_file="$1"
+    output_file="${2:-${input_file%.md}.html}"
+    pandoc -s -o "$output_file" "$input_file"
+    echo "HTML file generated: $output_file"
+}
+
+# Quickly access frequently used directories with bookmarks
+bookmark() {
+    case $1 in
+        add)
+            if [ $# -eq 2 ]; then
+                echo "alias $2='cd $(pwd)'" >> ~/.bashrc
+                source ~/.bashrc
+                echo "Bookmark added for $(pwd)"
+            else
+                echo "Usage: bookmark add <alias>"
+            fi
+            ;;
+        remove)
+            if [ $# -eq 2 ]; then
+                sed -i "/alias $2=/d" ~/.bashrc
+                unalias "$2"
+                source ~/.bashrc
+                echo "Bookmark removed: $2"
+            else
+                echo "Usage: bookmark remove <alias>"
+            fi
+            ;;
+        list)
+            grep "alias " ~/.bashrc | grep -oP "(?<=alias ).*(?=')"
+            ;;
+        *)
+            echo "Usage: bookmark [add|remove|list]"
+            ;;
+    esac
+}
+
+# Quickly convert images to a different format
+convert_image() {
+    if [ $# -lt 2 ]; then
+        echo "Usage: convert_image <input_file> <output_format>"
+        return 1
+    fi
+    input_file="$1"
+    output_format="$2"
+    output_file="${input_file%.*}.$output_format"
+    convert "$input_file" "$output_file"
+    echo "Image converted to $output_format: $output_file"
+}
+```
+
+## Shortcut Keys
+
+```bash
+#!/bin/bash
+
+# Movement Shortcuts
+CTRL+A  # Move to the beginning of the line
+CTRL+B  # Move backward one character
+CTRL+E  # Move to the end of the line
+CTRL+F  # Move forward one character
+ALT+B   # Move backward one word
+ALT+F   # Move forward one word
+
+# Deletion Shortcuts
+CTRL+D  # Delete one character backward or log out of the current session
+CTRL+H  # Delete one character under the cursor (same as DELETE)
+CTRL+K  # Delete forward to the end of the line
+CTRL+W  # Delete the word behind the cursor
+ALT+D   # Delete the next word
+ALT+H   # Delete one character backward
+
+# Line Editing Shortcuts
+CTRL+C  # Halt the current command
+CTRL+G  # Abort the current editing command and ring the terminal bell
+CTRL+L  # Clear the screen and redisplay the line
+CTRL+M  # Same as RETURN
+CTRL+J  # Same as RETURN
+CTRL+N  # Move to the next line in command history
+CTRL+P  # Move to the previous line in command history
+CTRL+Q  # Resume suspended shell output
+CTRL+R  # Search backward
+CTRL+S  # Search forward or suspend shell output
+CTRL+T  # Transpose two characters
+CTRL+U  # Kill backward from the point to the beginning of the line
+CTRL+V  # Make the next character typed verbatim
+CTRL+Y  # Retrieve (yank) the last item killed
+CTRL+Z  # Stop the current command, resume with fg in the foreground or bg in the background
+
+# Word Editing Shortcuts
+ALT+T   # Transpose two words
+ALT+U   # Capitalize every character from the current cursor position to the end of the word
+ALT+L   # Uncapitalize every character from the current cursor position to the end of the word
+ALT+C   # Capitalize the letter under the cursor
+ALT+R   # Revert any changes to a command pulled from history
+ALT+?   # List possible completions for what is typed
+ALT+^   # Expand line to the most recent match from history
+
+# Other Shortcuts
+CTRL+X then (       # Start recording a keyboard macro
+CTRL+X then )       # Finish recording keyboard macro
+CTRL+X then E       # Invoke text editor specified by $EDITOR on current command line then execute results as shell commands
+CTRL+A then D       # Logout from screen but don't kill it, if any command exists, it will continue
+
+# Character Deletion Shortcuts
+BACKSPACE  # Delete one character backward
+DELETE     # Delete one character under the cursor
+```
 
 ## Best Practices
 
@@ -1054,4 +1429,4 @@ We welcome contributions from the community! If you have improvements or additio
 
 This Bash Scripting Cheat Sheet is licensed under the [MIT License](LICENSE.md). Feel free to use, share, and modify the content as per the terms of the license.
 
-<h3 align='center'>🎉 😃 Happy scripting 🚀 🎉 </h3>
+<h3 align='center'>🎉 😃 Happy Scripting 🚀 🎉 </h3>
